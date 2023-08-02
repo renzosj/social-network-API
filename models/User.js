@@ -11,39 +11,28 @@ const userSchema = new Schema(
         email: {
             type: String,
             trim: true,
-            required: [true, 'User email required'],
+            required: true,
             unique: true,
-            validate: {
-                validator: (emailStr) => {
-                    return /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/.test(emailStr);
-                },
-                message: props => `${props.value} is not a valid email!`
-            }
+            match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
         },
         thoughts: [
             {
             // array of thoughts _id values,
             type: Schema.Types.ObjectId,
-            ref: 'thought'
-            }
+            ref: 'Thought'
+            },
         ],
         friends: [
             {
             // array of _id users, 
             type: Schema.Types.ObjectId,
-            ref: 'user'
+            ref: 'User'
             }
         ]
-    },
-    {
-        toJSON: {
-            virtuals: true,
-        },
-        id: false
     }
 );
 
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
 // create a virtual that retrieves length of user's friends array field on query

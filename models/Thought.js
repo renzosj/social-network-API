@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
-const { reactionSchema } = require('./Reaction');
-const { getFormattedCreatedAt } = require('../utils/getFormattedDate');
+const reactionSchema = require('./Reaction');
+const getFormattedCreatedAt = require('../utils/getFormattedDate');
 
 const thoughtSchema = new Schema(
     {
@@ -12,27 +12,19 @@ const thoughtSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now,
-            get: getFormattedCreatedAt
+            default: Date.now
         },
         username: {
             type: String,
             required: true
         },
-        reactions: [
-            reactionSchema
-        ]
+        reactions: [reactionSchema]
     },
-    {
-        toJSON: {
-            virtuals: true,
-        },
-        id: false
-    }
+    { toJSON: { virtuals: true, }, id: false }
 );
 
+thoughtSchema.virtual('getCreatedAt').get(getFormattedCreatedAt);
 
-
-const Thought = model('thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;
