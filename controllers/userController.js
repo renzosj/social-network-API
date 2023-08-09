@@ -4,7 +4,7 @@ const { User } = require('../models');
 // get ALL the users!
 async function getUsers(req, res) {
     try {
-        const usersData = await User.find();
+        const usersData = await User.find().populate('thoughts').populate('friends');
         if (!usersData) {
             res.status(404).json({message: "Where'd everybody go? Bingo?"});
         }
@@ -29,7 +29,7 @@ async function createUser(req, res) {
 // get ONE user
 async function getSingleUser(req, res) {
     try {
-        const userData = await User.findById(req.params.userId);
+        const userData = await User.findById(req.params.userId).populate('thoughts').populate('friends');
         res.status(200).json(userData);
         if (!userData) {
             res.status(404).json({message: "User not found"});
