@@ -1,5 +1,3 @@
-const { ObjectId } = require('mongoose').Types;
-const { response } = require('express');
 const { Thought, User } = require('../models');
 
 // get ALL the thoughts!
