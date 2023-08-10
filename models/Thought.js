@@ -23,7 +23,9 @@ const thoughtSchema = new Schema(
     { toJSON: { virtuals: true, }, id: false }
 );
 
-thoughtSchema.virtual('getCreatedAt').get(getFormattedCreatedAt);
+thoughtSchema.virtual('getFormattedCreatedAt').get(function() {
+    return getFormattedCreatedAt(this.createdAt);
+});
 
 const Thought = model('Thought', thoughtSchema);
 
