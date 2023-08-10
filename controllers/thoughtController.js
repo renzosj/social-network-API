@@ -4,9 +4,6 @@ const { Thought, User } = require('../models');
 async function getThoughts(req, res) {
     try {
         const thoughtsData = await Thought.find();
-        if (!thoughtsData) {
-            res.status(404).json({message: "The machinations of the mind are an enigma..."});
-        }
         res.status(200).json(thoughtsData);
     } catch (err) {
         console.log(err);
@@ -37,9 +34,6 @@ async function getSingleThought(req, res) {
     try {
         const thoughtData = await Thought.findById(req.params.thoughtId);
         res.status(200).json(thoughtData);
-        if (!thoughtData) {
-            res.status(404).json({message: "Thought(tm) not found"});
-        }
     } catch (err) {
         console.log(err); 
         res.status(500).json(err);
@@ -50,9 +44,6 @@ async function getSingleThought(req, res) {
 async function deleteThought(req, res) {
     try {
         const thoughtData = await Thought.findByIdAndDelete(req.params.thoughtId);
-        if (!thoughtData) {
-            res.status(404).json({message: "Thought(tm) not found"});
-        }
         res.status(200).json(thoughtData);
     } catch (err) {
         console.log(err);
@@ -68,9 +59,6 @@ async function updateThought(req, res) {
             { $set: req.body},
             { new: true }
         );
-        if (!thoughtData) {
-            res.status(404).json({message: "Thought(tm) not found"});
-        }
         res.status(200).json(thoughtData);
     } catch (err) {
         console.log(err);
@@ -78,7 +66,7 @@ async function updateThought(req, res) {
     }
 }
 
-// add a friend to thought
+// add a reaction to thought
 async function createReaction(req, res) {
     try {
         const thoughtData = await Thought.findOneAndUpdate(
@@ -86,9 +74,6 @@ async function createReaction(req, res) {
             { $addToSet: { reactions: req.body }},
             { runValidators: true, new: true }
         )
-        if (!thoughtData) {
-            res.status(404).json({message: "Thought(tm) not found"});
-        }
         res.status(200).json(thoughtData);
     } catch (err) {
         console.log(err);
@@ -96,17 +81,14 @@ async function createReaction(req, res) {
     }
 }
 
-//delete one friend of thought
+//delete one reaction from thought
 async function deleteReaction(req, res) {
     try {
         const thoughtData = await Thought.findOneAndUpdate(
             {_id : req.params.thoughtId},
-            { $pull: { reactions: req.body.reactionId }},
+            { $pull: { reactions: { reactionId: req.params.reactionId } }},
             { runValidators: true, new: true }
         )
-        if (!thoughtData) {
-            res.status(404).json({message: "Thought(tm) not found"});
-        }
         res.status(200).json(thoughtData);
     } catch (err) {
         console.log(err);

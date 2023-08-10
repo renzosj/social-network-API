@@ -24,6 +24,9 @@ const reactionSchema = new Schema(
     { toJSON: { virtuals: true, }, id: false }
 );
 
-reactionSchema.virtual('getCreatedAt').get(getFormattedCreatedAt);
+reactionSchema.virtual('getFormattedCreatedAt').get(function() {
+    return getFormattedCreatedAt(this.createdAt);
+});
+
 
 module.exports = reactionSchema;
